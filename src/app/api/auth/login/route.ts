@@ -17,13 +17,13 @@ export async function POST(req: Request) {
 
   try {
     const user = await User.findOne({ email });
-    if(!user){
+    if (!user) {
       return NextResponse.json(
         { message: "Invalid credentials!" },
         { status: 404 },
       );
     }
-    if(user.password != password){
+    if (user.password != password) {
       return NextResponse.json(
         { message: "Invalid credentials!" },
         { status: 401 },
