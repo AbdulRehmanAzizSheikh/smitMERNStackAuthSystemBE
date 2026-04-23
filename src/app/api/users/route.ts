@@ -4,7 +4,7 @@ import User from "@/lib/models/User";
 
 export async function GET(req: Request) {
   await connectMongodb();
-  let query = {};
+  let query: Record<string, any> = {};
   const { searchParams } = new URL(req.url);
 
   const id = searchParams.get("id");
