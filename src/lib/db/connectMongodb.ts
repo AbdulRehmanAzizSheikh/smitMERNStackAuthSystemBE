@@ -1,12 +1,23 @@
 import mongoose from "mongoose";
+declare global {
+  var mongoose:
+    | {
+        conn: any;
+        promise: any;
+      }
+    | undefined;
+}
 
-const MONGODB_URI = process.env.MONGODB_URI;
+let cached = global.mongoose;
+const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
   throw new Error("Please provide a valid MongoDB URI");
 }
 
-let cached = globalThis.mongoose || { conn: null, promise: null };
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 export const connectMongodb = async () => {
   if (cached.conn) {
