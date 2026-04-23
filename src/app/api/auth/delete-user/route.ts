@@ -15,7 +15,10 @@ export async function DELETE(req: Request) {
     }
     const token = Authorization.split(" ")[1];
 
-    const { id } = jwt.verify(token, process.env.JWT_SECRET!);
+    const { id } = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+    if (!id) {
+      return NextResponse.json({ message: "Invalid Token" }, { status: 401 });
+    }
     const user = await User.findById(id);
     if (!user) {
       return NextResponse.json({ message: "User not found!" }, { status: 404 });
