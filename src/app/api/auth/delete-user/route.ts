@@ -6,10 +6,10 @@ import jwt from "jsonwebtoken";
 export async function DELETE(req: Request) {
   try {
     await connectMongodb();
-    const Authorization = req.headers.get("Authorization");
+    const Authorization = req.headers.get("authorization");
     if (!Authorization || !Authorization.startsWith("Bearer ")) {
       return NextResponse.json(
-        { message: "User not logged in!" },
+        { message: "Authorization token is missing or invalid!" },
         { status: 401 },
       );
     }

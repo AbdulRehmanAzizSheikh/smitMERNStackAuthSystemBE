@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectMongodb } from "@/lib/db/connectMongodb";
 import User from "@/lib/models/User";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
   await connectMongodb();
@@ -23,7 +24,8 @@ export async function POST(req: Request) {
         { status: 404 },
       );
     }
-    if (user.password != password) {
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword) {
       return NextResponse.json(
         { message: "Invalid credentials!" },
         { status: 401 },
