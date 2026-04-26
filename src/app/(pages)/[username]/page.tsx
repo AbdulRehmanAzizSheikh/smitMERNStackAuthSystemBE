@@ -1,14 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Loader from "@/components/loder";
 export default function ProfilePage() {
   const params = useParams();
-  const username = params.username as string;
+  const username = decodeURIComponent(params.username as string);
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const getUserData = async () => {
+    setLoading(true);
     try {
       const res = await fetch(
-        `/api/user?username=${encodeURIComponent(username)}`,
+        `/api/user?username=${username.replace("@", "")}`,
         {
           method: "GET",
           headers: {
@@ -22,12 +25,15 @@ export default function ProfilePage() {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     getUserData();
   }, []);
-
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className=" flex justify-center bg-gray-900 text-white items-center h-screen">
       <div className=" text-center  justify-center flex-col flex  bg-blue-500 h-96 w-96 rounded-md gap-3">

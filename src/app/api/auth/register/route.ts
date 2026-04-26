@@ -28,12 +28,20 @@ export async function POST(req: Request) {
     );
     await User.create({ username, email, password: hashedPassword });
     return NextResponse.json(
-      { message: "User registered successfully!" },
+      {
+        registeration: {
+          success: true,
+        },
+        message: "User registered successfully!",
+      },
       { status: 201 },
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "User registration failed!", error: error },
+      {
+        registeration: { success: false },
+        message: "User registration failed!",
+      },
       { status: 500 },
     );
   }
