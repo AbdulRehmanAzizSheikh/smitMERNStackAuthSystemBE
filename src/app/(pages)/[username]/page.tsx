@@ -5,7 +5,7 @@ import Loader from "@/components/loder";
 export default function ProfilePage() {
   const params = useParams();
   const username = decodeURIComponent(params.username as string);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({ username: "", email: "", id: "" });
   const [loading, setLoading] = useState(true);
   const getUserData = async () => {
     setLoading(true);
@@ -27,7 +27,6 @@ export default function ProfilePage() {
     }
     setLoading(false);
   };
-
   useEffect(() => {
     getUserData();
   }, []);
@@ -39,13 +38,13 @@ export default function ProfilePage() {
       <div className=" text-center  justify-center flex-col flex  bg-blue-500 h-96 w-96 rounded-md gap-3">
         <h1 className="text-2xl text-white font-bold p-2">Profile Page</h1>
         <div className=" flex flex-row gap-3 bg-gray-900 text-white rounded-md p-2 m-2">
-          <h4>Username : {data?.username} </h4>
+          <h4>Username : {data.username && data.username} </h4>
         </div>
         <div className=" flex flex-row gap-3 bg-gray-900 text-white rounded-md p-2 m-2">
-          <h4>Email : {data?.email} </h4>
+          <h4>Email : {data.email && data.email} </h4>
         </div>
         <div className=" flex flex-row gap-3 bg-gray-900 text-white rounded-md p-2 m-2">
-          <h4>ID : {data?.id} </h4>
+          <h4>ID : {data.id && data.id} </h4>
         </div>
         <button
           className=" hover:bg-red-600 cursor-pointer w-36 mx-auto mt-2 bg-red-500 text-white px-4 py-2 rounded-md transition-all active:scale-95"
