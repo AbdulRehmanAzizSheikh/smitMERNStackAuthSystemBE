@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Loader from "@/components/loder";
+import Loader from "@/components/loader";
 export default function ProfilePage() {
   const params = useParams();
   const username = decodeURIComponent(params.username as string);

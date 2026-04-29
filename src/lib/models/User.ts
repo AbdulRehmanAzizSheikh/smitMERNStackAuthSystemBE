@@ -17,6 +17,11 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Please provide your password"],
       trim: true,
+      min: 8,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true },
