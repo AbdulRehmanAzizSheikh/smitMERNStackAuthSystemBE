@@ -34,16 +34,14 @@ export async function POST(req: NextRequest) {
       );
     }
     await connectMongodb();
-    const otp = otpGenerator(6);
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ message: "User not found!" }, { status: 404 });
     }
-    user.emailVerification = {
-      otp: otp,
-      otpExpiry: Date.now() + 10 * 60 * 1000,
-      verified: false,
-    };
+    const otp = otpGenerator(6);
+    user.verify.otp.code = otp;
+    user.verify.otp.expireAt = Date.now() + 10 * 60 * 1000;
+    user.verify.status = false;
     await user.save();
     await sendVerificationEmail(email, otp);
 
@@ -52,9 +50,11 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.log(error, "error ----------------------");
     return NextResponse.json(
-      { message: "Error verifying email" },
+      {
+        message: "Error sending verification email",
+        error,
+      },
       { status: 500 },
     );
   }

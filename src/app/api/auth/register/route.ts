@@ -26,11 +26,16 @@ export async function POST(req: Request) {
       password,
       Number(process.env.BCRYPT_SALT_ROUNDS),
     );
-    await User.create({ username, email, password: hashedPassword });
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
     return NextResponse.json(
       {
         registeration: {
           success: true,
+          user,
         },
         message: "User registered successfully!",
       },
@@ -41,6 +46,7 @@ export async function POST(req: Request) {
       {
         registeration: { success: false },
         message: "User registration failed!",
+        error,
       },
       { status: 500 },
     );

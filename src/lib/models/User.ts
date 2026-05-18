@@ -19,9 +19,19 @@ const userSchema = new Schema(
       trim: true,
       min: 8,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
+    verify: {
+      status: {
+        type: Boolean,
+        default: false,
+      },
+      otp: {
+        code: {
+          type: String,
+        },
+        expireAt: {
+          type: Date,
+        },
+      },
     },
   },
   { timestamps: true },

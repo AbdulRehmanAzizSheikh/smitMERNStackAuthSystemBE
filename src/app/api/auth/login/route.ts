@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectMongodb } from "@/lib/db";
+import { cookies } from "next/headers";
 import User from "@/lib/models/User";
-import jwt from "jsonwebtoken";
+import { generateToken } from "@/utils/jwt";
 import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
@@ -32,15 +33,23 @@ export async function POST(req: Request) {
       );
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!);
+    const token = generateToken({ id: user._id });
+    const cookieStore = await cookies();
+    cookieStore.set("token", token);
 
     return NextResponse.json(
-      { message: "User login successfully!", token: token },
+      { message: "User login successfully!" },
       { status: 200 },
     );
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "User login failed!", error: error.message },
+        { status: 500 },
+      );
+    }
     return NextResponse.json(
-      { message: "User login failed!", error: error },
+      { message: "User login failed!", error: "Unknown error" },
       { status: 500 },
     );
   }

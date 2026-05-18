@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,12 @@ export default function LoginPage() {
       }),
     });
     const data = await res.json();
-    console.log(data);
+    if (res.status === 200) {
+      toast.success(data.message);
+      console.log(document.cookie);
+    } else {
+      toast.error(data.message);
+    }
   };
   return (
     <div className="flex items-center justify-center h-screen">
